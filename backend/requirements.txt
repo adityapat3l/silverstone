@@ -1,0 +1,7 @@
+Flask
+FastAPI
+SQLAlchemy
+Pydantic
+uvicorn
+python-dotenv
+requests
