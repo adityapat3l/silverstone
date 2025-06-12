@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -24,7 +24,8 @@ class Item(Base):
     name = Column(String, index=True)
     description = Column(String, nullable=True)
     claimed_by = Column(Integer, ForeignKey('users.id'), nullable=True)
-    group_id = Column(Integer, ForeignKey('groups.id'))
+    group_id = Column(Integer, ForeignKey('groups.id'), nullable=True)
+    is_bought = Column(Boolean, default=False)
 
 class UserGroups(Base):
     __tablename__ = 'user_groups'

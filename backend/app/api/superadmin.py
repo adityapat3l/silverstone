@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from app import crud, models, schemas
 from app.database import get_db
@@ -16,12 +16,12 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 def create_group(group: schemas.GroupCreate, db: Session = Depends(get_db)):
     return crud.create_group(db=db, group=group)
 
-@router.get("/users/", response_model=List[schemas.User])
+@router.get("/users/", response_model=list[schemas.User])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
 
-@router.get("/groups/", response_model=List[schemas.Group])
+@router.get("/groups/", response_model=list[schemas.Group])
 def read_groups(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     groups = crud.get_groups(db, skip=skip, limit=limit)
     return groups

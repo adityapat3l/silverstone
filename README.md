@@ -1,70 +1,115 @@
-# Getting Started with Create React App
+# Camping App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a Camping App built with React for the frontend and FastAPI for the backend. It allows users to manage camping items, create groups, and facilitate item claiming and purchasing.
 
-## Available Scripts
+## Project Structure
 
-In the project directory, you can run:
+```
+camping-app
+├── backend
+│   ├── app
+│   ├── requirements.txt
+│   └── README.md
+├── frontend
+│   ├── public
+│   ├── src
+│   ├── package.json
+│   └── README.md
+├── terraform
+│   ├── main.tf
+│   ├── variables.tf
+│   ├── outputs.tf
+│   └── README.md
+└── README.md
+```
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Backend
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Navigate to the backend directory:
+   ```
+   cd backend
+   ```
 
-### `npm test`
+2. Install the required dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. Start the FastAPI server:
+   ```
+   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+   ```
 
-### `npm run build`
+### Frontend
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Navigate to the frontend directory:
+   ```
+   cd frontend
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Install the required dependencies:
+   ```
+   npm install
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Start the React application:
+   ```
+   npm start
+   ```
 
-### `npm run eject`
+### Terraform
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Navigate to the terraform directory:
+   ```
+   cd terraform
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. Initialize the Terraform configuration:
+   ```
+   terraform init
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+3. Create the infrastructure on AWS:
+   ```
+   terraform apply
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Features
 
-## Learn More
+- Add items needed for camping.
+- Allow users to claim items and mark them as bought.
+- Create and manage groups of users.
+- Add new people to existing groups.
+- Superadmin page for managing users and items.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+...existing code...
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Contributing
 
-### Code Splitting
+We welcome contributions! To get started:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+1. **Fork** this repository and clone it locally.
+2. Create a new branch for your feature or bugfix:
+   ```
+   git checkout -b my-feature
+   ```
+3. **Backend**: Add or update Python code in `backend/app`. Run tests with:
+   ```
+   pytest
+   ```
+4. **Frontend**: Add or update React code in `frontend/src`. Run tests with:
+   ```
+   npm test
+   ```
+5. **Debugging**: Use VS Code's debugging tools or add breakpoints/logging as needed.
+6. **Pull Requests**: Push your branch and open a pull request with a clear description of your changes.
 
-### Analyzing the Bundle Size
+### Building & Testing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **Backend**: Use `uvicorn` for local dev, `pytest` for tests.
+- **Frontend**: Use `npm start` for dev, `npm test` for tests, `npm run build` for production.
+- **Terraform**: Use `terraform plan` and `terraform apply` to manage infrastructure.
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+...existing code...

@@ -1,26 +1,28 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import ItemList from './components/ItemList';
-import GroupList from './components/GroupList';
-import AddItemForm from './components/AddItemForm';
-import AddPersonForm from './components/AddPersonForm';
-import SuperAdminPage from './components/SuperAdminPage';
+import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import CampingDashboard from './components/CampingDashboard';
 
-const App: React.FC = () => {
+const theme = createTheme({
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#2e7d32', // Green shade
+    },
+    secondary: {
+      main: '#f57c00', // Orange shade
+    },
+  },
+});
+
+function App() {
   return (
-    <Router>
-      <div>
-        <h1>Camping App</h1>
-        <Switch>
-          <Route path="/" exact component={ItemList} />
-          <Route path="/groups" component={GroupList} />
-          <Route path="/add-item" component={AddItemForm} />
-          <Route path="/add-person" component={AddPersonForm} />
-          <Route path="/superadmin" component={SuperAdminPage} />
-        </Switch>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div className="App">
+        <CampingDashboard />
       </div>
-    </Router>
+    </ThemeProvider>
   );
-};
+}
 
 export default App;

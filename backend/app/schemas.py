@@ -29,6 +29,10 @@ class UserCreate(BaseModel):
 class GroupCreate(BaseModel):
     name: str
 
+class GroupUpdate(BaseModel):
+    name: Optional[str] = None
+    members: Optional[List[int]] = None
+
 class ItemUpdate(BaseModel):
     claimed_by: Optional[int] = None
     is_bought: Optional[bool] = None
