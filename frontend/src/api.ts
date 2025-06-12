@@ -1,52 +1,58 @@
 import axios from 'axios';
+import { User, Item } from './types';
 
 const API_URL = 'http://localhost:8000/api';
 
-export interface User {
-    id: number;
-    name: string;
-    email: string;
-    items: Item[];
-}
-
-export interface Item {
-    id: number;
-    name: string;
-    description: string;
-    claimed_by: number | null;
-    is_bought: boolean;
-}
-
 export const api = {
     // User endpoints
-    createUser: async (name: string, email: string): Promise<User> => {
-        const response = await axios.post(`${API_URL}/users/`, { name, email });
+    async createUser(name: string, email: string): Promise<User> {
+        const response = await axios.post<User>(`${API_URL}/users/`, { name, email });
         return response.data;
     },
 
-    getUsers: async (): Promise<User[]> => {
-        const response = await axios.get(`${API_URL}/users/`);
+    async getUsers(): Promise<User[]> {
+        const response = await axios.get<User[]>(`${API_URL}/users/`);
         return response.data;
     },
 
     // Item endpoints
-    createItem: async (name: string, description: string): Promise<Item> => {
-        const response = await axios.post(`${API_URL}/items/`, { name, description });
+    async createItem(name: string, description: string): Promise<Item> {
+        const response = await axios.post<Item>(`${API_URL}/items/`, { name, description });
         return response.data;
     },
 
-    getItems: async (): Promise<Item[]> => {
-        const response = await axios.get(`${API_URL}/items/`);
+    async getItems(): Promise<Item[]> {
+        const response = await axios.get<Item[]>(`${API_URL}/items/`);
         return response.data;
     },
 
-    claimItem: async (itemId: number, userId: number): Promise<Item> => {
-        const response = await axios.post(`${API_URL}/items/${itemId}/claim?user_id=${userId}`);
+    async getUserItems(userId: number): Promise<Item[]> {
+        const response = await axios.get<Item[]>(`${API_URL}/items/user/${userId}`);
         return response.data;
     },
 
-    markBought: async (itemId: number, userId: number): Promise<Item> => {
-        const response = await axios.post(`${API_URL}/items/${itemId}/mark_bought?user_id=${userId}`);
+    async getUnclaimedItems(): Promise<Item[]> {
+        const response = await axios.get<Item[]>(`${API_URL}/items/unclaimed`);
+        return response.data;
+    },
+
+    async claimItem(itemId: number, userId: number): Promise<Item> {
+        const response = await axios.post<Item>(`${API_URL}/items/${itemId}/claim?user_id=${userId}`);
+        return response.data;
+    },
+
+    async unclaimItem(itemId: number, userId: number): Promise<Item> {
+        const response = await axios.post<Item>(`${API_URL}/items/${itemId}/unclaim?user_id=${userId}`);
+        return response.data;
+    },
+
+    async markBought(itemId: number, userId: number): Promise<Item> {
+        const response = await axios.post<Item>(`${API_URL}/items/${itemId}/mark_bought?user_id=${userId}`);
+        return response.data;
+    },
+
+    async markNotBought(itemId: number, userId: number): Promise<Item> {
+        const response = await axios.post<Item>(`${API_URL}/items/${itemId}/mark_not_bought?user_id=${userId}`);
         return response.data;
     }
 }; 

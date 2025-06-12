@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { api, User, Item } from './api';
+import { api } from './api';
+import { User, Item, UserCreate, ItemCreate } from './types';
 import './index.css';
+import ItemList from './components/ItemList';
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
@@ -36,7 +38,7 @@ function App() {
     }
   };
 
-  const handleCreateUser = async (e: React.FormEvent) => {
+  const handleCreateUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await api.createUser(newUserName, newUserEmail);
@@ -49,7 +51,7 @@ function App() {
     }
   };
 
-  const handleCreateItem = async (e: React.FormEvent) => {
+  const handleCreateItem = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await api.createItem(newItemName, newItemDescription);
@@ -101,7 +103,7 @@ function App() {
         <h2>Select User</h2>
         <select 
           value={selectedUser || ''} 
-          onChange={(e) => setSelectedUser(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedUser(Number(e.target.value))}
         >
           <option value="">Select a user</option>
           {users.map(user => (
@@ -120,7 +122,7 @@ function App() {
             <input
               type="text"
               value={newUserName}
-              onChange={(e) => setNewUserName(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewUserName(e.target.value)}
               required
             />
           </div>
@@ -129,7 +131,7 @@ function App() {
             <input
               type="email"
               value={newUserEmail}
-              onChange={(e) => setNewUserEmail(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewUserEmail(e.target.value)}
               required
             />
           </div>
@@ -145,7 +147,7 @@ function App() {
             <input
               type="text"
               value={newItemName}
-              onChange={(e) => setNewItemName(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewItemName(e.target.value)}
               required
             />
           </div>
@@ -153,7 +155,7 @@ function App() {
             <label>Description:</label>
             <textarea
               value={newItemDescription}
-              onChange={(e) => setNewItemDescription(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewItemDescription(e.target.value)}
               required
             />
           </div>
@@ -163,31 +165,9 @@ function App() {
 
       <div>
         <h2>Items</h2>
-        <ul className="item-list">
-          {items.map(item => (
-            <li key={item.id} className="item">
-              <h3>{item.name}</h3>
-              <p>{item.description}</p>
-              <p>Status: {item.is_bought ? 'Bought' : item.claimed_by ? 'Claimed' : 'Available'}</p>
-              {!item.claimed_by && (
-                <button 
-                  onClick={() => handleClaimItem(item.id)}
-                  disabled={!selectedUser}
-                >
-                  Claim
-                </button>
-              )}
-              {item.claimed_by && !item.is_bought && (
-                <button 
-                  onClick={() => handleMarkBought(item.id)}
-                  disabled={!selectedUser}
-                >
-                  Mark as Bought
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
+        <ItemList users={users} onClaimItem={handleClaimItem} onMarkBought={handleMarkBought} />
+          
+
       </div>
     </div>
   );

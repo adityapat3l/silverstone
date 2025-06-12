@@ -1,53 +1,46 @@
 import React, { useState } from 'react';
-import { TextField, Button, Box, Typography } from '@mui/material';
 import { UserCreate } from '../types';
 
 interface UserFormProps {
     onSubmit: (user: UserCreate) => void;
 }
 
-export const UserForm: React.FC<UserFormProps> = ({ onSubmit }) => {
+const UserForm: React.FC<UserFormProps> = ({ onSubmit }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        onSubmit({ name, email });
-        setName('');
-        setEmail('');
+        if (name && email) {
+            onSubmit({ name, email });
+            setName('');
+            setEmail('');
+        }
     };
 
     return (
-        <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, mx: 'auto', p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-                Create New User
-            </Typography>
-            <TextField
-                fullWidth
-                label="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                margin="normal"
-                required
-            />
-            <TextField
-                fullWidth
-                label="Email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                margin="normal"
-                required
-            />
-            <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{ mt: 2 }}
-            >
-                Create User
-            </Button>
-        </Box>
+        <form onSubmit={handleSubmit}>
+            <div className="form-group">
+                <label>Name:</label>
+                <input
+                    type="text"
+                    value={name}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                    required
+                />
+            </div>
+            <div className="form-group">
+                <label>Email:</label>
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                    required
+                />
+            </div>
+            <button type="submit">Add User</button>
+        </form>
     );
-}; 
+};
+
+export default UserForm; 

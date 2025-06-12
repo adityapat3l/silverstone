@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
+import { UserCreate } from '../types';
 
-const AddPersonForm = ({ onAddPerson }) => {
+interface AddPersonFormProps {
+    onAddPerson: (user: UserCreate) => void;
+}
+
+const AddPersonForm: React.FC<AddPersonFormProps> = ({ onAddPerson }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (name && email) {
             onAddPerson({ name, email });
@@ -15,23 +20,21 @@ const AddPersonForm = ({ onAddPerson }) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="name">Name:</label>
+            <div className="form-group">
+                <label>Name:</label>
                 <input
                     type="text"
-                    id="name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                     required
                 />
             </div>
-            <div>
-                <label htmlFor="email">Email:</label>
+            <div className="form-group">
+                <label>Email:</label>
                 <input
                     type="email"
-                    id="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                     required
                 />
             </div>

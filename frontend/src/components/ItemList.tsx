@@ -1,85 +1,137 @@
-import React from 'react';
-import {
-    List,
-    ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    IconButton,
-    Typography,
-    Paper,
-    Box,
-} from '@mui/material';
-import { CheckCircle, ShoppingCart } from '@mui/icons-material';
+import React, { useEffect, useState } from 'react';
 import { Item, User } from '../types';
+import { api } from '../api';
 
 interface ItemListProps {
-    items: Item[];
     users: User[];
-    onClaim: (itemId: number, userId: number) => void;
+    onClaimItem: (itemId: number, userId: number) => void;
     onMarkBought: (itemId: number, userId: number) => void;
 }
 
-export const ItemList: React.FC<ItemListProps> = ({
-    items,
-    users,
-    onClaim,
-    onMarkBought,
-}) => {
-    const getUserName = (userId: number | null) => {
-        if (!userId) return 'Unclaimed';
-        const user = users.find((u) => u.id === userId);
-        return user ? user.name : 'Unknown User';
+const ItemList: React.FC<ItemListProps> = ({ users, onClaimItem, onMarkBought }) => {
+    const [selectedUser, setSelectedUser] = useState<number | null>(null);
+    const [userItems, setUserItems] = useState<Item[]>([]);
+    const [unclaimedItems, setUnclaimedItems] = useState<Item[]>([]);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+
+    useEffect(() => {
+        fetchUnclaimedItems();
+        if (selectedUser) {
+            fetchUserItems();
+        }
+    }, [selectedUser]);
+
+    const fetchUserItems = async () => {
+        if (!selectedUser) return;
+        try {
+            const items = await api.getUserItems(selectedUser);
+            setUserItems(items);
+        } catch (err) {
+            setError('Failed to fetch user items');
+        }
+    };
+
+    const fetchUnclaimedItems = async () => {
+        try {
+            const items = await api.getUnclaimedItems();
+            setUnclaimedItems(items);
+        } catch (err) {
+            setError('Failed to fetch unclaimed items');
+        }
+    };
+
+    const handleUnclaimItem = async (itemId: number) => {
+        if (!selectedUser) return;
+        try {
+            await api.unclaimItem(itemId, selectedUser);
+            setSuccess('Item unclaimed successfully');
+            fetchUserItems();
+            fetchUnclaimedItems();
+        } catch (err) {
+            setError('Failed to unclaim item');
+        }
+    };
+
+    const handleMarkNotBought = async (itemId: number) => {
+        if (!selectedUser) return;
+        try {
+            await api.markNotBought(itemId, selectedUser);
+            setSuccess('Item marked as not bought');
+            fetchUserItems();
+        } catch (err) {
+            setError('Failed to mark item as not bought');
+        }
     };
 
     return (
-        <Paper sx={{ p: 2, maxWidth: 800, mx: 'auto', mt: 2 }}>
-            <Typography variant="h6" gutterBottom>
-                Items
-            </Typography>
-            <List>
-                {items.map((item) => (
-                    <ListItem
-                        key={item.id}
-                        divider
-                        sx={{
-                            bgcolor: item.is_bought ? 'action.hover' : 'background.paper',
-                        }}
-                    >
-                        <ListItemText
-                            primary={item.name}
-                            secondary={
-                                <Box>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {item.description}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        Claimed by: {getUserName(item.claimed_by)}
-                                    </Typography>
-                                </Box>
-                            }
-                        />
-                        <ListItemSecondaryAction>
-                            {!item.claimed_by && (
-                                <IconButton
-                                    edge="end"
-                                    onClick={() => onClaim(item.id, users[0]?.id)}
-                                    disabled={users.length === 0}
-                                >
-                                    <ShoppingCart />
-                                </IconButton>
-                            )}
-                            {item.claimed_by && !item.is_bought && (
-                                <IconButton
-                                    edge="end"
-                                    onClick={() => onMarkBought(item.id, item.claimed_by!)}
-                                >
-                                    <CheckCircle />
-                                </IconButton>
-                            )}
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                ))}
-            </List>
-        </Paper>
+        <div>
+            <div className="form-group">
+                <label>Select User:</label>
+                <select
+                    value={selectedUser || ''}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedUser(Number(e.target.value))}
+                >
+                    <option value="">Select a user</option>
+                    {users.map(user => (
+                        <option key={user.id} value={user.id}>
+                            {user.name} ({user.email})
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            {error && <div className="error">{error}</div>}
+            {success && <div className="success">{success}</div>}
+
+            {selectedUser && (
+                <div>
+                    <h2>Your Items</h2>
+                    <ul className="item-list">
+                        {userItems.map(item => (
+                            <li key={item.id} className="item">
+                                <h3>{item.name}</h3>
+                                <p>{item.description}</p>
+                                <p>Status: {item.is_bought ? 'Bought' : 'Claimed'}</p>
+                                <div className="item-actions">
+                                    {item.is_bought ? (
+                                        <button onClick={() => handleMarkNotBought(item.id)}>
+                                            Mark as Not Bought
+                                        </button>
+                                    ) : (
+                                        <button onClick={() => onMarkBought(item.id, selectedUser)}>
+                                            Mark as Bought
+                                        </button>
+                                    )}
+                                    <button onClick={() => handleUnclaimItem(item.id)}>
+                                        Unclaim Item
+                                    </button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
+            <div>
+                <h2>Unclaimed Items</h2>
+                <ul className="item-list">
+                    {unclaimedItems.map(item => (
+                        <li key={item.id} className="item">
+                            <h3>{item.name}</h3>
+                            <p>{item.description}</p>
+                            <button
+                                onClick={() => selectedUser && onClaimItem(item.id, selectedUser)}
+                                disabled={!selectedUser}
+                            >
+                                Claim
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
     );
 };
+
+export default ItemList;

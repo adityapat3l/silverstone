@@ -1,59 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { User } from '../types';
+import { api } from '../api';
 
 const SuperAdminPage: React.FC = () => {
-    const [users, setUsers] = useState([]);
-    const [groups, setGroups] = useState([]);
+    const [users, setUsers] = useState<User[]>([]);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         fetchUsers();
-        fetchGroups();
     }, []);
 
     const fetchUsers = async () => {
-        const response = await fetch('/api/users');
-        const data = await response.json();
-        setUsers(data);
+        try {
+            const data = await api.getUsers();
+            setUsers(data);
+        } catch (err) {
+            setError('Failed to fetch users');
+        }
     };
 
-    const fetchGroups = async () => {
-        const response = await fetch('/api/groups');
-        const data = await response.json();
-        setGroups(data);
-    };
-
-    const handleDeleteUser = async (userId: string) => {
-        await fetch(`/api/users/${userId}`, {
-            method: 'DELETE',
-        });
-        fetchUsers();
-    };
-
-    const handleDeleteGroup = async (groupId: string) => {
-        await fetch(`/api/groups/${groupId}`, {
-            method: 'DELETE',
-        });
-        fetchGroups();
+    const handleDeleteUser = async (userId: number) => {
+        try {
+            // TODO: Implement delete user functionality in the API
+            setError('Delete user functionality not implemented');
+        } catch (err) {
+            setError('Failed to delete user');
+        }
     };
 
     return (
-        <div>
+        <div className="container">
             <h1>Super Admin Page</h1>
-            <h2>Users</h2>
-            <ul>
-                {users.map(user => (
-                    <li key={user.id}>
-                        {user.name} <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
-                    </li>
-                ))}
-            </ul>
-            <h2>Groups</h2>
-            <ul>
-                {groups.map(group => (
-                    <li key={group.id}>
-                        {group.name} <button onClick={() => handleDeleteGroup(group.id)}>Delete</button>
-                    </li>
-                ))}
-            </ul>
+            {error && <div className="error">{error}</div>}
+
+            <div>
+                <h2>Users</h2>
+                <ul>
+                    {users.map(user => (
+                        <li key={user.id}>
+                            {user.name} <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 };
