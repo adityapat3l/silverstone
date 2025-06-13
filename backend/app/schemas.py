@@ -1,42 +1,42 @@
-from pydantic import BaseModel
 from typing import List, Optional
+from pydantic import BaseModel
 
-class Item(BaseModel):
-    id: int
+# Base schemas
+class UserBase(BaseModel):
     name: str
-    description: Optional[str] = None
+    email: str
+
+class ItemBase(BaseModel):
+    name: str
+    description: str
+
+# Create schemas
+class UserCreate(UserBase):
+    pass
+
+class ItemCreate(ItemBase):
+    pass
+
+# Response schemas
+class Item(ItemBase):
+    id: int
     claimed_by: Optional[int] = None
     is_bought: bool = False
 
-class User(BaseModel):
+    class Config:
+        from_attributes = True
+
+class User(UserBase):
     id: int
-    name: str
-    email: str
+    items: List[Item] = []
 
-class Group(BaseModel):
-    id: int
-    name: str
-    members: List[int] = []
-
-class ItemCreate(BaseModel):
-    name: str
-    description: Optional[str] = None
-
-class UserCreate(BaseModel):
-    name: str
-    email: str
-
-class GroupCreate(BaseModel):
-    name: str
-
-class GroupUpdate(BaseModel):
-    name: Optional[str] = None
-    members: Optional[List[int]] = None
+    class Config:
+        from_attributes = True
 
 class ItemUpdate(BaseModel):
     claimed_by: Optional[int] = None
     is_bought: Optional[bool] = None
 
-class UserInGroup(BaseModel):
-    user_id: int
-    group_id: int
+# Update forward references
+User.model_rebuild()
+Item.model_rebuild()

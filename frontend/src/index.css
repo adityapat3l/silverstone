@@ -1,0 +1,163 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #444;
+  margin: 20px 0;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.button-primary {
+  background-color: #4CAF50;
+}
+
+.button-secondary {
+  background-color: #2196F3;
+}
+
+.button-danger {
+  background-color: #f44336;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.tabs button {
+  background-color: #f8f8f8;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 4px 4px 0 0;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
+.item-list, .user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.item h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.item p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.item-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.status-claimed {
+  color: #2196F3;
+  font-weight: 500;
+}
+
+.status-bought {
+  color: #4CAF50;
+  font-weight: 500;
+}
+
+.status-available {
+  color: #FF9800;
+  font-weight: 500;
+}
+
+.error {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+} 

@@ -1,12 +1,11 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import items, groups, users, superadmin
-from app.database import engine
-from app import models
+from app.api import items, users, superadmin
+from app.database import engine, Base
 from fastapi.responses import JSONResponse
 
 # Create database tables
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Camping App API", version="1.0.0")
 
@@ -18,27 +17,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers with explicit prefixes
-app.include_router(items.router, prefix="/items", tags=["items"])
-app.include_router(groups.router, prefix="/groups", tags=["groups"])
-app.include_router(users.router, prefix="/users", tags=["users"])
-app.include_router(superadmin.router, prefix="/superadmin", tags=["superadmin"])
+# Include routers
+app.include_router(users.router, prefix="/api/users", tags=["users"])
+app.include_router(items.router, prefix="/api/items", tags=["items"])
+app.include_router(superadmin.router, prefix="/api/superadmin", tags=["superadmin"])
 
 @app.get("/", response_class=JSONResponse)
 def read_root(request: Request):
-    return JSONResponse(
-        content={
-            "message": "Welcome to the Camping App API!",
-            "status": "running",
-            "endpoints": [
-                "/users",
-                "/groups",
-                "/items",
-                "/superadmin",
-                "/debug"
-            ]
-        }
-    )
+    return {
+        "message": "Welcome to the Camping App API",
+        "docs_url": str(request.url) + "docs",
+        "version": "1.0.0"
+    }
 
 # Add a debug endpoint
 @app.get("/debug")

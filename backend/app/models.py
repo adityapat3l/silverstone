@@ -8,14 +8,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
-    groups = relationship("Group", secondary="user_groups")
-
-class Group(Base):
-    __tablename__ = 'groups'
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    members = relationship("User", secondary="user_groups")
+    items = relationship("Item", back_populates="claimed_by_user")
 
 class Item(Base):
     __tablename__ = 'items'
@@ -24,11 +17,5 @@ class Item(Base):
     name = Column(String, index=True)
     description = Column(String, nullable=True)
     claimed_by = Column(Integer, ForeignKey('users.id'), nullable=True)
-    group_id = Column(Integer, ForeignKey('groups.id'), nullable=True)
     is_bought = Column(Boolean, default=False)
-
-class UserGroups(Base):
-    __tablename__ = 'user_groups'
-
-    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
-    group_id = Column(Integer, ForeignKey('groups.id'), primary_key=True)
+    claimed_by_user = relationship("User", back_populates="items")
