@@ -233,9 +233,6 @@ const CampingDashboard: React.FC = () => {
 
     const renderItemsTab = () => (
         <div>
-            <h2>Create Item</h2>
-            <ItemForm onSubmit={handleCreateItem} />
-            <h2>All Items</h2>
             <ul className="item-list">
                 {items.map(item => {
                     const claimedUser = users.find(u => u.id === item.claimed_by);

@@ -8,9 +8,10 @@ interface ItemListProps {
     onClaimItem: (itemId: number, userId: number) => void;
     onMarkBought: (itemId: number, userId: number) => void;
     onItemAction?: () => void; // Callback to notify parent of item actions
+    onRefreshRequested?: (refreshFn: () => void) => void; // Callback to provide refresh function to parent
 }
 
-const ItemList: React.FC<ItemListProps> = ({ users, selectedUser, onClaimItem, onMarkBought, onItemAction }) => {
+const ItemList: React.FC<ItemListProps> = ({ users, selectedUser, onClaimItem, onMarkBought, onItemAction, onRefreshRequested }) => {
     const [userItems, setUserItems] = useState<Item[]>([]);
     const [unclaimedItems, setUnclaimedItems] = useState<Item[]>([]);
     const [error, setError] = useState('');
@@ -34,6 +35,13 @@ const ItemList: React.FC<ItemListProps> = ({ users, selectedUser, onClaimItem, o
             setError('Failed to fetch unclaimed items');
         }
     }, []);
+
+    // Provide the refresh function to parent component
+    useEffect(() => {
+        if (onRefreshRequested) {
+            onRefreshRequested(fetchUnclaimedItems);
+        }
+    }, [fetchUnclaimedItems, onRefreshRequested]);
 
     useEffect(() => {
         fetchUnclaimedItems();

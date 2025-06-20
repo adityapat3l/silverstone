@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { api } from './api';
 import { User, Item, UserCreate, ItemCreate } from './types';
 import './index.css';
 import ItemList from './components/ItemList';
+import ItemForm from './components/ItemForm';
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
@@ -14,6 +15,7 @@ function App() {
   const [newItemDescription, setNewItemDescription] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [refreshUnclaimedItems, setRefreshUnclaimedItems] = useState<(() => void) | null>(null);
 
   useEffect(() => {
     fetchUsers();
@@ -94,6 +96,17 @@ function App() {
     fetchItems();
   };
 
+  const handleItemCreated = () => {
+    fetchItems();
+    if (refreshUnclaimedItems) {
+      refreshUnclaimedItems();
+    }
+  };
+
+  const handleRefreshRequested = useCallback((refreshFn: () => void) => {
+    setRefreshUnclaimedItems(() => refreshFn);
+  }, []);
+
   return (
     <div className="container">
       <h1>Camping App</h1>
@@ -142,27 +155,8 @@ function App() {
       </div>
 
       <div>
-        <h2>Create Item</h2>
-        <form onSubmit={handleCreateItem}>
-          <div className="form-group">
-            <label>Name:</label>
-            <input
-              type="text"
-              value={newItemName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewItemName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Description:</label>
-            <textarea
-              value={newItemDescription}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewItemDescription(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit">Create Item</button>
-        </form>
+        <h2>Test Item Form</h2>
+        <ItemForm onItemCreated={handleItemCreated} />
       </div>
 
       <div>
@@ -173,6 +167,7 @@ function App() {
           onClaimItem={handleClaimItem} 
           onMarkBought={handleMarkBought}
           onItemAction={handleItemAction}
+          onRefreshRequested={handleRefreshRequested}
         />
       </div>
     </div>
