@@ -72,7 +72,6 @@ function App() {
     try {
       await api.claimItem(itemId, selectedUser);
       setSuccess('Item claimed successfully');
-      fetchItems();
     } catch (err) {
       setError('Failed to claim item');
     }
@@ -86,10 +85,13 @@ function App() {
     try {
       await api.markBought(itemId, selectedUser);
       setSuccess('Item marked as bought');
-      fetchItems();
     } catch (err) {
       setError('Failed to mark item as bought');
     }
+  };
+
+  const handleItemAction = () => {
+    fetchItems();
   };
 
   return (
@@ -165,7 +167,13 @@ function App() {
 
       <div>
         <h2>Items</h2>
-        <ItemList users={users} onClaimItem={handleClaimItem} onMarkBought={handleMarkBought} />
+        <ItemList 
+          users={users} 
+          selectedUser={selectedUser}
+          onClaimItem={handleClaimItem} 
+          onMarkBought={handleMarkBought}
+          onItemAction={handleItemAction}
+        />
       </div>
     </div>
   );
