@@ -69,6 +69,7 @@ const ItemList: React.FC<ItemListProps> = ({ users, selectedUser, onClaimItem, o
         if (!selectedUser) return;
         try {
             await onMarkBought(itemId, selectedUser);
+            setSuccess('Item marked as bought');
             // Refresh user items after marking as bought
             await fetchUserItems();
             onItemAction?.();
@@ -93,6 +94,7 @@ const ItemList: React.FC<ItemListProps> = ({ users, selectedUser, onClaimItem, o
         if (!selectedUser) return;
         try {
             await onClaimItem(itemId, selectedUser);
+            setSuccess('Item claimed successfully');
             // Refresh both lists after claiming
             await fetchUserItems();
             await fetchUnclaimedItems();

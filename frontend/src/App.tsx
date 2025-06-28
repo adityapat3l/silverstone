@@ -9,11 +9,13 @@ import UserSelector from './components/UserSelector';
 import MessageBanner from './components/MessageBanner';
 import { useUsers } from './hooks/useUsers';
 import { useItems } from './hooks/useItems';
+import Navbar from './components/Navbar';
 
 function App() {
   const { users, loading: usersLoading, error: usersError, fetchUsers } = useUsers();
   const { items, loading: itemsLoading, error: itemsError, fetchItems } = useItems();
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
+  const [selectedTab, setSelectedTab] = useState<string>('dashboard');
   const [newItemName, setNewItemName] = useState('');
   const [newItemDescription, setNewItemDescription] = useState('');
   const [refreshUnclaimedItems, setRefreshUnclaimedItems] = useState<(() => void) | null>(null);
@@ -71,33 +73,31 @@ function App() {
 
   return (
     <div className="container">
+      <Navbar selectedTab={selectedTab} onTabChange={setSelectedTab} />
       <h1>Camping App</h1>
-
       <MessageBanner error={usersError || itemsError} />
 
-      <UserSelector users={users} selectedUser={selectedUser} onSelectUser={setSelectedUser} />
-
-      <div>
-        <h2>Create User</h2>
+      {selectedTab === 'createUser' && (
         <AddPersonForm onUserCreated={fetchUsers} />
-      </div>
+      )}
 
-      <div>
-        <h2>Add Items</h2>
-        <ItemForm onItemCreated={handleItemCreated} />
-      </div>
+      {selectedTab === 'createItem' && (
+        <ItemForm onItemCreated={fetchItems} />
+      )}
 
-      <div>
-        <h2>Tracked Items</h2>
-        <ItemList 
-          users={users} 
-          selectedUser={selectedUser}
-          onClaimItem={handleClaimItem} 
-          onMarkBought={handleMarkBought}
-          onItemAction={handleItemAction}
-          onRefreshRequested={handleRefreshRequested}
-        />
-      </div>
+      {selectedTab === 'dashboard' && (
+        <>
+          <UserSelector users={users} selectedUser={selectedUser} onSelectUser={setSelectedUser} />
+          <ItemList 
+            users={users} 
+            selectedUser={selectedUser}
+            onClaimItem={handleClaimItem} 
+            onMarkBought={handleMarkBought}
+            onItemAction={handleItemAction}
+            onRefreshRequested={handleRefreshRequested}
+          />
+        </>
+      )}
     </div>
   );
 }
