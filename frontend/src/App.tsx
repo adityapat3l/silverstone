@@ -10,6 +10,7 @@ import MessageBanner from './components/MessageBanner';
 import { useUsers } from './hooks/useUsers';
 import { useItems } from './hooks/useItems';
 import Navbar from './components/Navbar';
+import Layout from './components/Layout';
 
 function App() {
   const { users, loading: usersLoading, error: usersError, fetchUsers } = useUsers();
@@ -72,33 +73,34 @@ function App() {
   }, []);
 
   return (
-    <div className="container">
-      <Navbar selectedTab={selectedTab} onTabChange={setSelectedTab} />
-      <h1>Camping App</h1>
-      <MessageBanner error={usersError || itemsError} />
+    <Layout selectedTab={selectedTab} onTabChange={setSelectedTab}>
+      <div className="container">
+        <h1>Camping App</h1>
+        <MessageBanner error={usersError || itemsError} />
 
-      {selectedTab === 'createUser' && (
-        <AddPersonForm onUserCreated={fetchUsers} />
-      )}
+        {selectedTab === 'createUser' && (
+          <AddPersonForm onUserCreated={fetchUsers} />
+        )}
 
-      {selectedTab === 'createItem' && (
-        <ItemForm onItemCreated={fetchItems} />
-      )}
+        {selectedTab === 'createItem' && (
+          <ItemForm onItemCreated={fetchItems} />
+        )}
 
-      {selectedTab === 'dashboard' && (
-        <>
-          <UserSelector users={users} selectedUser={selectedUser} onSelectUser={setSelectedUser} />
-          <ItemList 
-            users={users} 
-            selectedUser={selectedUser}
-            onClaimItem={handleClaimItem} 
-            onMarkBought={handleMarkBought}
-            onItemAction={handleItemAction}
-            onRefreshRequested={handleRefreshRequested}
-          />
-        </>
-      )}
-    </div>
+        {selectedTab === 'dashboard' && (
+          <>
+            <UserSelector users={users} selectedUser={selectedUser} onSelectUser={setSelectedUser} />
+            <ItemList 
+              users={users} 
+              selectedUser={selectedUser}
+              onClaimItem={handleClaimItem} 
+              onMarkBought={handleMarkBought}
+              onItemAction={handleItemAction}
+              onRefreshRequested={handleRefreshRequested}
+            />
+          </>
+        )}
+      </div>
+    </Layout>
   );
 }
 

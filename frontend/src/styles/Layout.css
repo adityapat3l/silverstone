@@ -1,0 +1,117 @@
+.main-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fffef8;
+}
+
+.main-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: linear-gradient(90deg, #ff9800 0%, #ffd200 100%);
+  padding: 0 0 0 24px;
+  min-height: 96px;
+  box-shadow: 0 2px 8px rgba(255, 168, 0, 0.08);
+  border-radius: 0 0 24px 24px;
+  position: relative;
+}
+
+.logo-side {
+  display: flex;
+  align-items: center;
+  height: 80px;
+  z-index: 3;
+}
+
+.logo {
+  height: 56px;
+  width: auto;
+  border-radius: 12px;
+  background: none;
+  box-shadow: none;
+  padding: 0 18px 0 0;
+}
+
+.navbar-fun {
+  background: none;
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.navbar-fun-tabs {
+  display: flex;
+  justify-content: flex-start;
+  gap: 24px;
+  list-style: none;
+  margin: 0 0 0 12px;
+  padding: 0 32px 0 0;
+  background: linear-gradient(90deg, #36c3f2 0%, #3edfa0 100%);
+  border-radius: 40px;
+  box-shadow: 0 4px 16px rgba(54, 195, 242, 0.12);
+  min-height: 56px;
+  align-items: center;
+  position: relative;
+  top: 0;
+  z-index: 2;
+}
+
+.navbar-fun-tab {
+  background: #e6f6fd;
+  color: #187fae;
+  border: none;
+  border-radius: 24px;
+  padding: 10px 28px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+  box-shadow: none;
+}
+
+.navbar-fun-tab.active {
+  background: #259edb;
+  color: #fff;
+}
+
+.navbar-fun-tab:hover:not(.active) {
+  background: #b2e6fa;
+  color: #187fae;
+}
+
+.main-content {
+  flex: 1;
+  padding: 32px 0 24px 0;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.main-footer {
+  background: #fffbe7;
+  color: #ff9800;
+  text-align: center;
+  padding: 18px 0 14px 0;
+  font-size: 1.1rem;
+  border-top: 2px solid #ffd200;
+  letter-spacing: 0.02em;
+}
+
+.main-footer a {
+  color: #ff9800;
+  text-decoration: none;
+  font-weight: 600;
+  margin: 0 8px;
+  transition: color 0.2s;
+}
+
+.main-footer a:hover {
+  color: #f7971e;
+  text-decoration: underline;
+} 
